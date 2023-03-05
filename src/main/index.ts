@@ -11,6 +11,7 @@ function createWindow(): void {
     show: false,
     autoHideMenuBar: true,
     frame: false,
+    titleBarStyle: 'hidden',
     ...(process.platform === 'linux' ? { icon } : {}),
     webPreferences: {
       preload: join(__dirname, '../preload/index.js'),
@@ -40,6 +41,8 @@ function createWindow(): void {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
+  // 用于注册无边窗口管理API，渲染进程通过调用 ipcRenderer 触发窗口管理事件（win:invoke），如：调用 ipcRenderer.send('win:invoke', 'close') 关闭窗口
+  optimizer.registerFramelessWindowIpc()
   // Set app user model id for windows
   electronApp.setAppUserModelId('com.electron')
 
